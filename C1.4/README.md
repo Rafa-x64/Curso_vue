@@ -1,44 +1,43 @@
-# Nivel 1.4: Captura de Eventos y Formularios Bidireccionales (`v-on`, `v-model`)
+# Clase 1.4: Introducción a Vue.js y la Magia de la Reactividad
 
-¡Bienvenido al Nivel 1.4! Hasta ahora nuestra web muestra datos y reacciona de forma pasiva. Llegó el momento de interactuar con el usuario. Hoy aprenderás a escuchar clicks, envíos de formularios y capturar lo que el usuario escribe en tiempo real sin necesidad de hacer selecciones manuales del DOM.
+¡Bienvenidos al siguiente nivel! Hasta ahora modificamos el DOM "a mano". Vue.js cambia las reglas: nosotros solo gestionamos los datos, y Vue actualiza el HTML automáticamente.
 
 ## Conceptos Clave
 
-- **Manejo de Eventos (`v-on:` o `@`):** Reemplaza por completo el viejo `addEventListener`. Para escuchar eventos como clicks, pulsaciones de teclas o envíos de formularios, usamos la directiva `@` seguida del nombre del evento (ejemplo: `@click`, `@submit`). Los métodos encargados de responder a estos eventos se guardan dentro de la opción `methods` de Vue.
-- **Enlace Bidireccional (`v-model`):** Esta es una de las características más potentes de Vue. Sincroniza de forma inmediata un control de formulario (como un `<input>`) con una variable de nuestro `data()`. Si el usuario escribe en el input, la variable cambia sola; si cambias la variable desde el código, el texto del input se actualiza al instante. Los datos fluyen en ambas direcciones.
-- **Modificadores de Eventos:** Vue nos permite interceptar el comportamiento nativo de los eventos directamente en el HTML. El más usado es `.prevent`, que equivale a escribir `event.preventDefault()` para evitar que la página web se recargue al enviar un formulario.
+* **CDN:** Forma rápida de importar Vue.js mediante una simple etiqueta `<script>` en el HTML.
+* **`Vue.createApp()`:** Inicia una nueva aplicación reactiva y define su comportamiento.
+* **`data()`:** Función que retorna un objeto con el estado (variables) que la interfaz necesita observar.
+* **Interpolación (`{{ }}`):** Sintaxis en el HTML (bigotes) para imprimir dinámicamente el valor de una variable de Vue.
+* **`.mount('#app')`:** Indica a Vue en qué contenedor exacto del HTML tiene control absoluto para actuar.
+
+## Enseñanza Comparativa: Vanilla JS vs Vue.js
+
+**Vanilla JS (Imperativo):** Buscas el elemento y le ordenas explícitamente cambiar.
+```javascript
+const mensajeNodo = document.querySelector('#mensaje');
+mensajeNodo.textContent = 'Hola Mundo';
+```
+
+**Vue.js (Declarativo):** Defines la variable en el HTML y Vue sincroniza los cambios automáticamente.
+```html
+<p>{{ mensaje }}</p>
+```
+```javascript
+data() {
+  return { mensaje: 'Hola Mundo' }
+}
+```
 
 ## Buenas Prácticas
 
-1. **Mantén los métodos limpios de manipulación visual:** Los métodos en Vue solo deben encargarse de modificar los valores de las variables de estado. Deja que Vue se encargue de actualizar la interfaz visual automáticamente.
-2. **Aprovecha los modificadores nativos:** Prefiere usar declaraciones limpias en el HTML como `@keyup.enter` en lugar de capturar el evento del teclado dentro del código JavaScript para evaluar manualmente si la tecla presionada fue el "Enter".
+* **Contenedor Aislado:** Nunca montes Vue en la etiqueta `<body>`. Usa un contenedor dedicado y envolvente, por convención `<div id="app">`.
+* **Estado Limpio:** La función `data()` solo debe retornar las variables que impactan directamente a la interfaz.
 
-## Ejemplos de Código (Enseñanza Comparativa)
-
-### Caso: Sincronizar el texto de un input y limpiar su valor al hacer click
-
-#### Vanilla JavaScript (Enfoque Manual)
-
-```html
-<input type="text" id="caja-texto" />
-<button id="boton-limpiar">Limpiar</button>
-
-<script>
-  const input = document.getElementById("caja-texto");
-  const boton = document.getElementById("boton-limpiar");
-
-  boton.addEventListener("click", () => {
-    input.value = "";
-  });
-</script>
-```
-
-#### Vue.js (Enfoque Reactivo)
+## Ejemplos de Código
 
 ```html
 <div id="app">
-  <input type="text" v-model="nota" />
-  <button @click="limpiarNota">Limpiar</button>
+  <h1>{{ tituloPrincipal }}</h1>
 </div>
 
 <script src="[https://unpkg.com/vue@3/dist/vue.global.js](https://unpkg.com/vue@3/dist/vue.global.js)"></script>
@@ -46,80 +45,56 @@
   Vue.createApp({
     data() {
       return {
-        nota: "",
+        tituloPrincipal: 'Panel Reactivo'
       };
-    },
-    methods: {
-      limpiarNota() {
-        this.nota = "";
-      },
-    },
-  }).mount("#app");
+    }
+  }).mount('#app');
 </script>
 ```
 
 ## Planificación Proactiva
 
-> **Nota de Arquitectura:** Al utilizar `v-model` y delegar los eventos a Vue, desvinculamos por completo la lógica del negocio de la estructura del HTML, permitiendo reutilizar funciones sin depender de identificadores ID o clases CSS.
+> Delegar la manipulación del DOM a Vue.js mediante un enfoque declarativo elimina selectores manuales, permitiendo escalar limpiamente hacia componentes reutilizables.
 
-## Mini-Proyecto: Lista de Invitados VIP
+## Mini-Proyecto: Tarjeta de Presentación Reactiva
 
-Crearemos un sistema dinámico que permita escribir el nombre de un invitado en un formulario, agregarlo a una lista en pantalla al presionar un botón o la tecla Enter, y que limpie el campo automáticamente bloqueando registros vacíos.
+Interfaz mínima que muestra un mensaje de bienvenida y el nombre del usuario conectando el HTML a variables controladas por Vue.
 
 ```html
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Acceso VIP</title>
-  </head>
-  <body>
-    <div id="app">
-      <h3>Registro de Invitados VIP</h3>
+<head>
+  <meta charset="UTF-8">
+  <title>Tarjeta Vue</title>
+  <script src="[https://unpkg.com/vue@3/dist/vue.global.js](https://unpkg.com/vue@3/dist/vue.global.js)"></script>
+</head>
+<body>
 
-      <form @submit.prevent="registrarInvitado">
-        <input
-          type="text"
-          v-model="nuevoNombre"
-          placeholder="Nombre del invitado"
-        />
-        <button type="submit">Agregar Lista</button>
-      </form>
+  <main id="app">
+    <p>Estado del sistema: {{ mensaje }}</p>
+    <p>Operador actual: {{ nombre }}</p>
+  </main>
 
-      <h4>Invitados Confirmados:</h4>
-      <ul>
-        <li v-for="persona in listaInvitados" :key="persona">{{ persona }}</li>
-      </ul>
-    </div>
-
-    <script src="[https://unpkg.com/vue@3/dist/vue.global.js](https://unpkg.com/vue@3/dist/vue.global.js)"></script>
-    <script>
-      Vue.createApp({
-        data() {
-          return {
-            nuevoNombre: "",
-            listaInvitados: ["Alejandro", "Beatriz"],
-          };
-        },
-        methods: {
-          registrarInvitado() {
-            if (this.nuevoNombre.trim() !== "") {
-              this.listaInvitados.push(this.nuevoNombre);
-              this.nuevoNombre = "";
-            }
-          },
-        },
-      }).mount("#app");
-    </script>
-  </body>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          mensaje: 'Bienvenido al servidor',
+          nombre: 'Rafael Alvarez'
+        };
+      }
+    }).mount('#app');
+  </script>
+  
+</body>
 </html>
 ```
 
 ## Trivia
 
-1. **¿Qué hace exactamente el modificador `@submit.prevent` en un formulario de Vue?**
-   - Cancela el comportamiento de recarga predeterminado del navegador al enviar el formulario.
-2. **¿Cuál es la diferencia operativa entre enlazar un dato con `{{ }}` y hacerlo con `v-model`?**
-   - `{{ }}` es de una sola dirección (solo lee datos), mientras que `v-model` es bidireccional (lee y escribe cambios desde y hacia el formulario).
-3. **Para acceder a una variable definida en `data()` desde una función dentro de `methods`, ¿qué palabra clave es obligatoria usar?**
-   - La palabra clave `this` (por ejemplo: `this.nuevoNombre`).
+1. **¿Qué hace la sintaxis `{{ }}` en el HTML?**
+   * *Respuesta:* Interpola e imprime dinámicamente el valor de las variables definidas en la función `data()`.
+2. **¿Por qué la propiedad `data` debe ser una función que retorna un objeto?**
+   * *Respuesta:* Para asegurar que cada instancia de la aplicación mantenga una copia independiente y fresca de sus datos.
+3. **¿Cuál es el rol de `.mount('#app')`?**
+   * *Respuesta:* Conecta y delega toda la lógica reactiva de Vue a un elemento físico específico del HTML.

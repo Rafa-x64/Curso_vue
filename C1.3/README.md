@@ -1,98 +1,62 @@
-# Nivel 1.3: Directivas Condicionales y de Listas (`v-if`, `v-for`)
+# Clase 1.3: JavaScript Moderno y Modificación Directa del DOM
 
-¡Qué tal! Ya sabemos cómo arrancar Vue y pintar datos dinámicos usando los "bigotes" (`{{ }}`). Hoy vamos a darle inteligencia a nuestra interfaz. Aprenderemos a ocultar o mostrar elementos según las condiciones del negocio y a multiplicar etiquetas HTML de forma automática usando listas de datos. En el mundo de Vue, a estas herramientas las llamamos **Directivas**.
+¡Qué tal! Ahora que entendemos la estructura y presentación, es hora de darle vida a nuestra web. Dejamos atrás las prácticas antiguas y nos enfocamos en JavaScript moderno para leer y modificar nuestra interfaz en tiempo real.
 
 ## Conceptos Clave
 
-- **¿Qué es una Directiva?:** Son atributos especiales de HTML que empiezan con el prefijo `v-`. Piensas en ellos como superpoderes que le dicen al HTML cómo comportarse de manera dinámica.
-- **`v-if` y `v-else`:** Funcionan exactamente como un `if/else` en programación tradicional. Si la condición dentro de `v-if` es verdadera, el elemento se dibuja en el navegador. Si es falsa, Vue **elimina por completo** el elemento del DOM, haciendo que deje de existir en el árbol de la página web. `v-else` debe ir inmediatamente debajo de un `v-if` para mostrar una alternativa.
-- **`v-for`:** Es nuestro bucle `for` para el HTML. Nos permite iterar sobre un array de datos y repetir la etiqueta HTML por cada elemento que exista en la lista.
-- **El Atributo `:key`:** Cuando usas `v-for`, Vue te obliga a colocar un atributo `:key` (enlace de clave única). Esto sirve para que Vue recuerde la identidad exacta de cada elemento en el HTML. Si la lista cambia, Vue solo actualiza el elemento modificado en lugar de redibujar toda la pantalla.
+- **Variables Modernas (`let` y `const`):** Usamos `let` para valores mutables (como un contador) y `const` para valores fijos o referencias a la interfaz.
+- **Template Literals (` `` `):** Permiten inyectar variables directamente en una cadena de texto usando `${variable}`, evitando concatenaciones complejas.
+- **Selección del DOM:** Usamos `document.querySelector('#id')` para capturar elementos de forma limpia.
+- **`textContent`:** La propiedad más segura para leer o sobrescribir el texto plano de una etiqueta HTML.
+- **`console.log()`:** Herramienta clave para imprimir valores en la consola del navegador y verificar datos internamente.
 
 ## Buenas Prácticas
 
-1. **Jamás mezcles `v-if` y `v-for` en el mismo elemento:** Si necesitas filtrar una lista, no pongas el `v-if` dentro de la misma etiqueta que tiene el `v-for`. Vue prioriza una directiva sobre la otra y esto genera un impacto de rendimiento terrible o comportamientos extraños.
-2. **Usa identificadores únicos para el `:key`:** Utiliza siempre un ID único de tu base de datos o un valor irrepetible. Evita usar el índice de la lista (`index`) si tus datos se van a ordenar o eliminar, ya que romperá el rastreo interno de Vue.
+- **Prioriza `const`:** Declara todo como `const` por defecto. Cambia a `let` solo si el valor va a mutar. Esto previene comportamientos inesperados.
+- **Nombres descriptivos:** Nombres como `userScore` o `titleNode` se explican solos.
 
-## Ejemplos de Código (Enseñanza Comparativa)
-
-### Caso: Renderizar una lista de elementos dinámicamente
-
-#### Vanilla JavaScript (Enfoque Manual)
+## Ejemplos de Código
 
 ```html
-<ul id="contenedor-frutas"></ul>
-
-<script>
-  const contenedor = document.getElementById("contenedor-frutas");
-  const frutas = ["Manzana", "Plátano", "Kiwi"];
-
-  contenedor.innerHTML = frutas.map((fruta) => `<li>${fruta}</li>`).join("");
-</script>
+<h1 id="titulo">Título por defecto</h1>
 ```
 
-#### Vue.js (Enfoque Declarativo Automático)
+```javascript
+const tituloApp = document.querySelector("#titulo");
+const userName = "Ana";
+let userScore = 10;
 
-```html
-<div id="app">
-  <ul>
-    <li v-for="fruta in frutas" :key="fruta">{{ fruta }}</li>
-  </ul>
-</div>
-
-<script src="[https://unpkg.com/vue@3/dist/vue.global.js](https://unpkg.com/vue@3/dist/vue.global.js)"></script>
-<script>
-  Vue.createApp({
-    data() {
-      return {
-        frutas: ["Manzana", "Plátano", "Kiwi"],
-      };
-    },
-  }).mount("#app");
-</script>
+tituloApp.textContent = `Panel de Control: ${userName} - Puntos: ${userScore}`;
+console.log(tituloApp.textContent);
 ```
 
 ## Planificación Proactiva
 
-> **Nota de Arquitectura:** Separar los datos crudos de las plantillas HTML permite que la interfaz sea escalable; si el array de frutas pasa de tener 3 elementos a 3000 desde una API, el HTML de Vue no cambia ni una sola línea.
+> Aislar la captura de elementos del DOM en constantes al inicio del archivo evita búsquedas redundantes en memoria, preparando el terreno para la arquitectura de estado aislado.
 
-## Mini-Proyecto: Monitor de Stock de Tienda
+## Mini-Proyecto: Actualizador de Perfil
 
-Crearemos una aplicación que evalúe si hay stock disponible. Si hay productos, los listará limpiamente; si el catálogo queda vacío, mostrará de forma automática un aviso de advertencia.
+Este ejercicio modifica un párrafo en el HTML para mostrar un nombre y un contador, integrando exclusivamente lo aprendido.
 
 ```html
 <!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Monitor de Inventario</title>
+    <title>Perfil</title>
   </head>
   <body>
-    <div id="app">
-      <h2>Catálogo de Almacén</h2>
+    <h1 id="titulo">Sistema</h1>
+    <p id="mensaje"></p>
 
-      <ul v-if="productos.length > 0">
-        <li v-for="producto in productos" :key="producto.id">
-          {{ producto.nombre }} - Unidades: {{ producto.cantidad }}
-        </li>
-      </ul>
-
-      <p v-else>⚠️ Alerta crítica: No quedan productos en el inventario.</p>
-    </div>
-
-    <script src="[https://unpkg.com/vue@3/dist/vue.global.js](https://unpkg.com/vue@3/dist/vue.global.js)"></script>
     <script>
-      Vue.createApp({
-        data() {
-          return {
-            productos: [
-              { id: 101, nombre: "Laptops Pro", cantidad: 5 },
-              { id: 102, nombre: "Monitores 4K", cantidad: 12 },
-              { id: 103, nombre: "Teclados Mecánicos", cantidad: 8 },
-            ],
-          };
-        },
-      }).mount("#app");
+      const nombreEstudiante = "Rafael";
+      let visitas = 0;
+
+      const nodoMensaje = document.querySelector("#mensaje");
+      nodoMensaje.textContent = `Bienvenido ${nombreEstudiante}, número de visitas: ${visitas}`;
+
+      console.log(nodoMensaje.textContent);
     </script>
   </body>
 </html>
@@ -100,9 +64,9 @@ Crearemos una aplicación que evalúe si hay stock disponible. Si hay productos,
 
 ## Trivia
 
-1. **¿Qué diferencia real hay entre cómo maneja Vue el renderizado cuando una condición de `v-if` pasa a ser falsa?**
-   - El elemento se elimina físicamente por completo del árbol del DOM del navegador, no solo se oculta visualmente.
-2. **¿Por qué es obligatorio y crucial colocar el atributo `:key` al usar un bucle `v-for`?**
-   - Para darle una identidad única a cada elemento, optimizando el rendimiento del DOM al actualizar solo lo que cambió.
-3. **¿Qué sucede si pones un `v-if` y un `v-for` exactamente en la misma etiqueta HTML?**
-   - Es una mala práctica que genera problemas de rendimiento y lógica confusa debido al orden de prioridad interno de las directivas en Vue.
+1. **¿Qué diferencia fundamental existe entre `let` y `const`?**
+   - _Respuesta:_ `let` permite reasignar el valor en el futuro, mientras que `const` crea una referencia de solo lectura que no puede ser reasignada.
+2. **¿Cuál es la función principal de `console.log()`?**
+   - _Respuesta:_ Imprimir variables o mensajes en la consola del navegador para depurar el código detrás de escena.
+3. **¿Por qué usamos Template Literals (backticks) en lugar de comillas normales?**
+   - _Respuesta:_ Porque permiten la interpolación directa de variables usando `${}` dentro del texto, mejorando la legibilidad.
