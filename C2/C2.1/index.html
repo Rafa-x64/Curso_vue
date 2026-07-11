@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>If else</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div v-if="estaLogueado === true">
+        <h1>Bienvenido usuario</h1>
+        <button @click="alternar()">Cerrar Sesion</button>
+      </div>
+
+      <div v-else>
+        <form action="" @prevent.submit>
+          <input type="text" name="nombre" id="nombre" placeholder="nombre usuario">
+          <input type="text" name="contraseña" id="contraseña" placeholder="contraseña usuario">
+        </form>
+        <button @click="alternar">Iniciar Sesion</button>
+      </div>
+
+    </div>
+  </body>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          estaLogueado: true,
+        };
+      },
+
+      //funciones
+      methods: {
+        alternar(){
+          if(this.estaLogueado == true){
+            this.estaLogueado = false;
+          }else{
+            this.estaLogueado = true;
+          }
+        }
+      }
+    }).mount("#app");
+  </script>
+</html>
+
+<!--
+Crear una estructura funcional de un sistema que simule la transición entre un estado de sesión activa y un formulario de acceso [7].
+
+Instrucciones:
+
+Define una variable booleana estaLogueado en el data() de tu app.
+Crea un contenedor para el "Formulario de Acceso" que solo se vea si estaLogueado es falso.
+Crea un contenedor de "Bienvenida" que solo se vea si estaLogueado es verdadero.
+Usa un botón para cambiar el valor de la variable y observa cómo Vue intercambia los componentes en el DOM instantáneamente
+-->

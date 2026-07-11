@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>v-for</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <ul>
+        <li v-for="fruta in frutas" :key="fruta.id">{{fruta.nombre}}</li>
+      </ul>
+      <!--
+      Crear un catálogo dinámico que genere tarjetas de productos automáticamente a partir de un array de objetos, garantizando la persistencia del estado visual mediante IDs únicos.
+
+Instrucciones:
+
+Define un array llamado inventario en tu data() con al menos 3 objetos (cada uno con id, nombre y precio).
+
+Crea una estructura de tarjeta (card) en HTML.
+
+Usa la directiva v-for en el contenedor de la tarjeta para repetir el diseño por cada producto.
+
+Vincula el producto.id al atributo :key.
+
+Muestra los datos usando la interpolación de "bigotes" {{ }}.
+      -->
+
+      <div id="card" class="card" v-for="repuesto in repuestos" :key="repuesto.id">
+        <div id="card-header" class="card-header">{{repuesto.idRepuesto}}</div>
+        <div id="card-body" class="card-body">{{repuesto.nombre}}</div>
+        <div id="card-footer" class="card-footer">{{repuesto.descripcion}}</div>
+      </div>
+    </div>
+  </body>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          /*frutas: [
+            {
+              id: 1,
+              nombre: "manzana",
+              color: "rojo",
+            },
+            {
+              id: 2,
+              nombre: "pera",
+              color: "verde",
+            },
+            {
+              id: 3,
+              nombre: "banana",
+              color: "amarillo",
+            },
+          ],
+          */
+          repuestos: [
+            {
+              idRepuesto: 1,
+              nombre: "tornillo",
+              descripcion: "tornillo de cruz"
+            },
+            {
+              idRepuesto: 2,
+              nombre: "tuerca",
+              descripcion: "tuerca pequeña"
+            }
+          ]
+        };
+      },
+    }).mount("#app");
+  </script>
+  <script src="index.js"></script>
+</html>

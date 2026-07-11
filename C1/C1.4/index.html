@@ -4,22 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!--Instalacion-->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   </head>
   <body>
     <div id="app">
-      <p>{{ mensaje }}</p>
-      <p> {{ nombre }} </p>
+      <h1>{{message}}</h1>
+      <h2 style="color: purple">{{message1}}</h2>
+      <h3 style="color: red">{{message2}}</h3>
     </div>
   </body>
+  <!--escribir js-->
   <script>
-    const app = Vue.createApp({
-      data() {
-        return {
-          mensaje: "bienvenido",
-          nombre: "Rafael Alvarez",
-        };
-      },
-    }).mount("#app");
+    Vue.createApp(
+      {
+        //almacen de variables
+        data(){
+          //retorna un objeto
+          return {
+            //variables
+            message: "Hola mundo",
+            message1: "Hola Nathalia",
+            message2: "Te extraño"
+          }
+        }
+      }
+    ).mount("#app");
   </script>
+
 </html>
