@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metodos y Eventos</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!--
+    Objetivo: Crear una interfaz que permita aumentar o disminuir el inventario de un producto. Si el stock llega a cero, el botón de compra debe desaparecer y mostrar un aviso de "Agotado".
+Instrucciones:
+
+Define una variable stock en data() con un valor inicial (ej. 5).
+Crea dos botones: uno para "Agregar" y otro para "Quitar".
+Crea dos métodos en methods que aumenten o disminuyan el valor de this.stock.
+Asegúrate de que el stock nunca sea menor a 0.
+Usa v-if para que el botón de "Comprar" solo exista si stock > 0.
+Usa Flexbox para centrar tus botones y que se vean profesionales.
+    -->
+    <main id="app">
+      <p>{{stock}}</p>
+      <button v-if="stock > 0" @click="aumentar()">Agregar</button>
+      <button @click="disminuir()">Disminuir</button>
+      <p v-if="stock === 0">sin stock</p>
+    </main>
+  </body>
+  <script>
+    Vue.createApp({
+      //nuestras variables
+      data() {
+        return {
+          stock: 10,
+        };
+      },
+
+      //nuestros metodos o funcciones
+      methods: {
+        aumentar() {
+          this.stock++; // Aumenta sin límite
+        },
+
+        disminuir() {
+          if (this.stock > 0) {
+            this.stock--;
+          }
+        },
+      },
+    }).mount("#app");
+  </script>
+</html>
